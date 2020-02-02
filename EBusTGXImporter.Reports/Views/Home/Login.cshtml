@@ -1,0 +1,87 @@
+﻿@model EBusTGXImporter.Reports.Models.LoginModel
+@{
+    ViewBag.title = "Login";
+}
+<style>
+    .outer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .inner {
+        width: 50%;
+        height: 50%;
+        top: 40%;
+        margin: 0 auto;
+        position: relative;
+    }
+</style>
+<div class="row outer">
+    <div class="carousel inner">
+        @using (Html.BeginForm("Login", "Home", FormMethod.Post))
+        {
+            <div class="row">
+                <div class="col-lg-4 col-md-4">
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <div class="form-group">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-user"></span></div>
+                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "User Name", id = "txtUserName" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4">
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <div class="form-group">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></div>
+                            @Html.TextBoxFor(m => m.Password, new { @class = "form-control", placeholder = "Password", id = "txtPassword", type = "password" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4">
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <div class="form-group">
+                        <div class="input-group input-group-sm" style="margin-left: 7pc;">
+                            <button type="submit" id="btnLogin" class="btn btn-primary form-control ">Login</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var loggedIn = "@Model.IsLoggedIn" == "False"? false:true;
+        if (!loggedIn) {
+            alert("Invalid User Name or Password.!!");
+        }
+
+        $("button#btnLogin").click(function () {
+            var userName = $("input#txtUserName").val();
+            var password = $("input#txtPassword").val();
+            if (userName == "" || password == "") {
+                alert("User Name and Password is Mandatory.!!");
+                return false;
+            }
+        });
+    });
+</script>
+

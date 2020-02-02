@@ -1,0 +1,102 @@
+﻿@model EBusTGXImporter.Reports.Models.Filters
+@{
+    ViewBag.Title = "SmartCardTransaction";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<div class='container' style='margin-top: 100px;'>
+        <input type='text' class="form-control" id='datepicker' style='width: 300px;'> <br>
+        <input type='text' class="form-control" data-provide="datepicker" style='width: 300px;'>
+    </div>*@
+@section Scripts{
+    <link href="~/Content/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+    <!-- Script -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#datepicker').datepicker({ format: "dd/mm/yy" });
+
+            $("button#dnPdf").click(function () {
+                $("input#hdnFileType").attr("value", "PDF");
+                GetSmartCardTransaction("PDF");
+            });
+
+            $("button#dnExcel").click(function () {
+                $("input#hdnFileType").attr("value", "EXCEL");
+                GetSmartCardTransaction("EXCEL");
+            });
+        });
+
+        function GetSmartCardTransaction(fileType) {
+
+            var serialNumber = $("input#SmartCardNumber").val();
+            var fromDate = $("input#StartDate").val();
+            var toDate = $("input#EndDate").val();
+
+            if (serialNumber == "" || fromDate == "" || toDate == "") {
+                alert("Please enter all the filtes.!!");
+                return false;
+            }
+
+        @*$.ajax({
+            async: false,
+            url: '@Url.Action("SmartCardTransaction", "Reports")',
+            type: 'Post',
+            data: JSON.stringify({ SerialNumber: serialNumber, FromDate: fromDate, ToDate: toDate, FileType: fileType }),
+            dataType: 'json',
+            contentType: 'application/json',
+            error: function (xhr) {
+                alert('Error: ' + xhr.statusText);
+            },
+            success: function (result) {
+                //Now Process the data
+                alert(result);
+                $("button#btnSearch").trigger("click");
+            }
+        }).done(function (result) {
+            return false;
+        });*@
+    }
+    </script>
+}
+
+<div id="page-wrapper" style="min-height: 446px;">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="page-header" style="margin: 10px; color: #5e5e5e !important">Smart Card Transactions</h2>
+        </div>
+    </div>
+    @using (Html.BeginForm("SmartCardTransaction", "Reports", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="form-group row" style="margin: 0px;">
+                <div align="left" class="col-sm-4 ">
+                    <label class="lblFont" for="Website">SmartCard Number</label>
+                    @*<input class="form-control zindex valid" data-val="true" id="SmartCardNumber" name="SmartCardNumber" placeholder="Smart card number" type="text" value="">*@
+                    @Html.TextBoxFor(m => m.SerialNumber, new { @class = "form-control  zindex valid", id = "SmartCardNumber", name = "SmartCardNumber", placeholder = "Smart card number" })
+                </div>
+                <div align="left" class="col-sm-4">
+                    <label class="lblFont" for="Location">From Date</label>
+                    @*<input class="form-control zindex hasDatepicker valid" data-provide="datepicker" data-date-format="dd/mm/yyyy" id="StartDate" name="StartDate" placeholder="From Date" type="text" value="">*@
+                    @Html.TextBoxFor(m => m.FromDate, new { @class = "form-control hasDatepicker zindex valid", data_provide = "datepicker", data_date_format = "dd/mm/yyyy", id = "StartDate", name = "StartDate", placeholder = "From Date" })
+                </div>
+
+                <div align="left" class="col-sm-4">
+                    <label class="lblFont" for="Pincode">Till Date</label>
+                    @*<input class="form-control zindex hasDatepicker valid" data-provide="datepicker" data-date-format="dd/mm/yyyy" id="EndDate" name="EndDate" placeholder="Till Date" type="text" value="">*@
+                    @Html.TextBoxFor(m => m.ToDate, new { @class = "form-control hasDatepicker zindex valid", data_provide = "datepicker", data_date_format = "dd/mm/yyyy", id = "EndDate", name = "EndDate", placeholder = "To Date" })
+                </div>
+                @Html.HiddenFor(m => m.FileType, new {id = "hdnFileType"})
+            </div>
+            <div class="form-group width80">
+                <div align="center" class="col-sm-12" style="margin-top: 20px;">
+                    <button id="dnPdf" type="submit" class="btn btn-success">
+                        Download PDF
+                    </button>
+                    <button id="dnExcel" type="submit" class="btn btn-info">
+                        Download Excel
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
