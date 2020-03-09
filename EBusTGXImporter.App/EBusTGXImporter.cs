@@ -141,7 +141,7 @@ namespace EBusTGXImporter.App
 
         public void InitializeRefreshTimer()
         {
-            //Timer logTimer = new Timer();
+            //System.Windows.Forms.Timer logTimer = new System.Windows.Forms.Timer();
             //logTimer.Interval = (20 * 1000); // 5 secs
             //logTimer.Tick += new EventHandler(TriggerLogRrefresh);
             //logTimer.Start();

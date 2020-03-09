@@ -1454,14 +1454,16 @@ namespace EBusTGXImporter.Core
                 catch (Exception ex)
                 {
                     if (ex.Message.Contains("Violation of PRIMARY KEY"))
-                    {
+                    {                        
                         if (fallBackCount < 3)
                         {
+                            Logger.Info("Violation of PRIMARY KEY occured fallback activated: " + fallBackCount);
                             int milliseconds = 60000;
                             Thread.Sleep(milliseconds);
                             fallBackCount++;
                             goto FALLBACK;
                         }
+                        Logger.Info("Violation of PRIMARY KEY occured fallback failed: " + fallBackCount);
                     }
                     throw;
                 }

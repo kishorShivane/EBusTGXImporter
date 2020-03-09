@@ -115,16 +115,18 @@ namespace EBusTGXImporter.DataProvider
                 {
                     con.Open();
                     string query = "";
-                    if (assetExist) {
+                    if (assetExist)
+                    {
                         query = "UPDATE TAssetETM SET ModuleID = " + asset.ModuleID + ", TrayID = " +
-                            asset.TrayID + ", ETMConfig='" + asset.ETMConfig + "', dat_LastUpdate = '" + 
-                            asset.dat_LastUpdate + "',TimeBand= '" + asset.TimeBand + "', DutySel = '"+ asset.DutySel+ "' , TgxIpAddr = '" + asset.TgxIpAddr + "' WHERE ETMID = " + asset.ETMID + ";";
+                            asset.TrayID + ", ETMConfig='" + asset.ETMConfig + "', dat_LastUpdate = CONVERT(DATETIME,'" +
+                            asset.dat_LastUpdate.Value.Month + "/" + asset.dat_LastUpdate.Value.Day + "/" + asset.dat_LastUpdate.Value.Year + " " + asset.dat_LastUpdate.Value.Hour + ":" + asset.dat_LastUpdate.Value.Minute + ":" + asset.dat_LastUpdate.Value.Second + ":" + asset.dat_LastUpdate.Value.Millisecond + " '),TimeBand= '" + asset.TimeBand + "', DutySel = '" + asset.DutySel + "' , TgxIpAddr = '" + asset.TgxIpAddr + "' WHERE ETMID = " + asset.ETMID + ";";
                     }
                     else
                     {
-                        query = "INSERT INTO TAssetETM VALUES(" + asset.ETMID + "," + 
-                            asset.ModuleID + "," + asset.TrayID + ",'" + asset.ETMConfig 
-                            + "','" + asset.DutySel + "',NULL,NULL,'" + asset.TimeBand + "',NULL,NULL,NULL,NULL,'" + asset.TgxIpAddr + "',NULL,NULL,NULL,NULL,'" + asset.dat_LastUpdate + "');";
+                        query = "INSERT INTO TAssetETM VALUES(" + asset.ETMID + "," +
+                            asset.ModuleID + "," + asset.TrayID + ",'" + asset.ETMConfig
+                            + "','" + asset.DutySel + "',NULL,NULL,'" + asset.TimeBand + "',NULL,NULL,NULL,NULL,'" + asset.TgxIpAddr + "',NULL,NULL,NULL,NULL,CONVERT(DATETIME,'" +
+                            asset.dat_LastUpdate.Value.Month + "/" + asset.dat_LastUpdate.Value.Day + "/" + asset.dat_LastUpdate.Value.Year + " " + asset.dat_LastUpdate.Value.Hour + ":" + asset.dat_LastUpdate.Value.Minute + ":" + asset.dat_LastUpdate.Value.Second + ":" + asset.dat_LastUpdate.Value.Millisecond + " ');";
                     }
                     Logger.Info(query);
                     using (cmd = new SqlCommand(query, con))
@@ -402,7 +404,9 @@ namespace EBusTGXImporter.DataProvider
 
                     if (Constants.DetailedLogging)
                     {
+                        var dutyLst = xmlDataToImport.Duties.Select(x => x.int4_DutyID.ToString()).ToList();
                         Logger.Info("Duties Inserted: " + xmlDataToImport.Duties.Count().ToString());
+                        Logger.Info("Duty ID's Inserted: " + string.Join(",", dutyLst));
                         Logger.Info("Modules Inserted: " + xmlDataToImport.Modules.Count().ToString());
                         Logger.Info("Waybills Inserted:  " + xmlDataToImport.Waybills.Count().ToString());
                         Logger.Info("Journeys Inserted:  " + xmlDataToImport.Journeys.Count().ToString());

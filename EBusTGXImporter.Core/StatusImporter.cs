@@ -108,13 +108,13 @@ namespace EBusTGXImporter.Core
 
                 if (dbService.InsertOrUpdateAssetETM(asset, dbService.DoesRecordExist("TAssetETM", "ETMID", asset.ETMID.ToString(), dbName), dbName))
                 {
-                    helper.MoveSuccessFile(filePath, dbName);
+                    helper.MoveSuccessStatusFile(filePath, dbName);
                     Logger.Info("**************Successfully Processed:" + filePath + "**************");
                 }
                 else
                 {
                     Logger.Error("Issue while inserting or updating Asset ETM record with ETMID: " + asset.ETMID);
-                    helper.MoveErrorFile(filePath, dbName);
+                    helper.MoveErrorStatusFile(filePath, dbName);
                 }
             }
             catch (Exception ex)
@@ -126,7 +126,7 @@ namespace EBusTGXImporter.Core
                     Logger.Error("Exception:" + exception);
                 }
                 Logger.Error("Exception:" + exception);
-                helper.MoveErrorFile(filePath, dbName);
+                helper.MoveErrorStatusFile(filePath, dbName);
                 if (Constants.EnableEmailTrigger)
                 {
                     emailHelper.SendMail(filePath, dbName, exception, EmailType.Error);
