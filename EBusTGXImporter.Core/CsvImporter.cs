@@ -391,7 +391,7 @@ namespace EBusTGXImporter.Core
                     string Revenue = values[7].ToString().Trim();
                     if (values.Length > 9)
                     {
-                        Revenue = values[9].ToString().Trim();
+                        Revenue = values[10].ToString().Trim();
                     }
                     string CashierDate = DateTime.ParseExact(date, "yyyyMMdd", null).ToString("yyyy-MM-dd");
                     string tempTime = DateTime.ParseExact(time, "HHmmss", null).ToString("HH:mm:ss tt");
