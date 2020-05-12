@@ -389,6 +389,10 @@ namespace EBusTGXImporter.Core
                     string time = values[2].ToString().Trim();
                     string Employee = values[3].ToString().Trim();
                     string Revenue = values[7].ToString().Trim();
+                    if (values.Length > 9)
+                    {
+                        Revenue = values[9].ToString().Trim();
+                    }
                     string CashierDate = DateTime.ParseExact(date, "yyyyMMdd", null).ToString("yyyy-MM-dd");
                     string tempTime = DateTime.ParseExact(time, "HHmmss", null).ToString("HH:mm:ss tt");
                     string CashierTime = CashierDate + " " + tempTime;
@@ -479,9 +483,37 @@ namespace EBusTGXImporter.Core
                     #region Process Staff Information
                     if (!dbService.DoesRecordExist("Staff", "int4_StaffID", Employee, dbName))
                     {
+                        if (staffDetails.FirstOrDefault(y => y.int4_StaffID.ToString() == Employee) == null)
+                        {
+                            staffDetail = new Staff
+                            {
+                                int4_StaffID = Convert.ToInt32(Employee)
+                            };
+                            staffDetail.str50_StaffName = "New Staff" + " - " + staffDetail.int4_StaffID;
+                            staffDetail.bit_InUse = true;
+                            staffDetail.int4_StaffTypeID = 1;
+                            staffDetail.int4_StaffSubTypeID = 0;
+                            staffDetail.dat_RecordMod = DateTime.Now;
+                            //var runningBoard = dutyDetail.str_OperatorVersion;
+                            staffDetail.str4_LocationCode = "0001";//runningBoard.Substring(runningBoard.Length - 4, 4);
+                            staffDetail.str2_LocationCode = null;
+                            staffDetails.Add(staffDetail);
+                        }
+                    }
+                    #endregion
+
+                });
+
+                #endregion
+
+                #region Process Staff Information
+                if (!dbService.DoesRecordExist("Staff", "int4_StaffID", newFile, dbName))
+                {
+                    if (staffDetails.FirstOrDefault(x => x.int4_StaffID.ToString() == newFile) == null)
+                    {
                         staffDetail = new Staff
                         {
-                            int4_StaffID = Convert.ToInt32(Employee)
+                            int4_StaffID = Convert.ToInt32(newFile)
                         };
                         staffDetail.str50_StaffName = "New Staff" + " - " + staffDetail.int4_StaffID;
                         staffDetail.bit_InUse = true;
@@ -493,28 +525,6 @@ namespace EBusTGXImporter.Core
                         staffDetail.str2_LocationCode = null;
                         staffDetails.Add(staffDetail);
                     }
-                    #endregion
-
-                });
-
-                #endregion
-
-                #region Process Staff Information
-                if (!dbService.DoesRecordExist("Staff", "int4_StaffID", newFile, dbName))
-                {
-                    staffDetail = new Staff
-                    {
-                        int4_StaffID = Convert.ToInt32(newFile)
-                    };
-                    staffDetail.str50_StaffName = "New Staff" + " - " + staffDetail.int4_StaffID;
-                    staffDetail.bit_InUse = true;
-                    staffDetail.int4_StaffTypeID = 1;
-                    staffDetail.int4_StaffSubTypeID = 0;
-                    staffDetail.dat_RecordMod = DateTime.Now;
-                    //var runningBoard = dutyDetail.str_OperatorVersion;
-                    staffDetail.str4_LocationCode = "0001";//runningBoard.Substring(runningBoard.Length - 4, 4);
-                    staffDetail.str2_LocationCode = null;
-                    staffDetails.Add(staffDetail);
                 }
                 #endregion
 
